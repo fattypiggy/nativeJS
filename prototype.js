@@ -47,3 +47,36 @@ console.log(point1.__proto__.constructor === Point); // true
 
 // 类的实例的proto和类的原型相同
 console.log(point1.__proto__ === Point.prototype); // true
+
+// Point同时存在prototype和__proto__
+// log in Chrome
+console.log(Point.prototype);
+// {constructor: ƒ, toString: ƒ}
+//     constructor:class Point
+//     toString:ƒ toString()
+//     __proto__:Object
+
+// log in Chrome
+console.log(Point.__proto__);
+// ƒ () { [native code] }
+
+class ColorPoint extends Point {
+    constructor(x, y, color) {
+        // this.color = color; // ReferenceError
+        super(x, y); // 必须调用super，而且要先调用，否则子类得不到this对象
+        this.color = color;
+    }
+    toString() {
+        return `(${this.x}, ${this.y}, ${this.color})`;
+    }
+}
+
+let cp = new ColorPoint(2, 3, 'red');
+
+// ES6 class继承存在两条继承链
+
+// __proto__ 表示构造函数的继承，指向父类
+console.log(ColorPoint.__proto__ === Point); // true
+
+// prototype表示方法的继承，指向父类的prototype
+console.log(ColorPoint.prototype.__proto__ === Point.prototype); // true
